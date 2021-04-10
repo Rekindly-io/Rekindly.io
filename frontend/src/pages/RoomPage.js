@@ -4,7 +4,6 @@ import {useContext} from "react";
 
 
 function RoomPage() {
-
     const socket = useContext(SocketContext);
 
     return (

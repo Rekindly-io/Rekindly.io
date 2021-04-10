@@ -5794,6 +5794,11 @@
     "d" "^1.0.1"
     "ext" "^1.1.2"
 
+"es6-tween@^5.5.11":
+  "integrity" "sha512-pRog/aPrGkPnblRJvuGcVTxlLqIu1TivB39zc6lw7jgOqIyOkqTBlTVr7ynlLjVGviezfYc3CZJWVAtOU3aoXQ=="
+  "resolved" "https://registry.npmjs.org/es6-tween/-/es6-tween-5.5.11.tgz"
+  "version" "5.5.11"
+
 "escalade@^3.0.2", "escalade@^3.1.1":
   "integrity" "sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw=="
   "resolved" "https://registry.npmjs.org/escalade/-/escalade-3.1.1.tgz"
