@@ -1,5 +1,6 @@
 import Globe from 'react-globe.gl'
-
+import AddRoomButton from '../Components/AddRoomButton';
+import './Room.css'; 
 function handleClick() {
     alert("u clicked a dot")
 }
@@ -14,10 +15,17 @@ function Rooms() {
     }))
 
     return (
-        <Globe globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-            pointsData={gData}
-            pointAltitude={0}
-            onPointClick={handleClick} />
+        <div>
+            <div>
+                <Globe globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                pointsData={gData}
+                pointAltitude={0}
+                onPointClick={handleClick} />
+            </div>
+            <div id="createRoom">
+                <AddRoomButton/> 
+            </div>
+        </div>
     )
 }
 
