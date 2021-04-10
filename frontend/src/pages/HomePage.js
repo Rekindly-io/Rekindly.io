@@ -3,50 +3,77 @@ import AddRoomButton from "../components/AddRoomButton";
 import "./Room.css";
 import markers from "../components/globe/markers";
 import markerRenderer from "../components/globe/markerRenderer";
-import { Text, Flex, Spacer } from "@chakra-ui/react"
-import { Box, Stack } from "@chakra-ui/layout"
+import { Text, Flex, Spacer, Button } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/layout";
 import { useState } from "react";
 
 function HomePage() {
-    const options = {
-        markerRenderer,
-        markerTooltipRenderer: () => {}
-    }
+  const options = {
+    markerRenderer,
+    markerTooltipRenderer: () => { },
+  };
 
-    const [overlayInfo, setOverlayInfo] = useState(null)
+  const [overlayInfo, setOverlayInfo] = useState(null);
+  const joinRoom = (e, info) => {
+    
+  }
+  return (
+    <div>
+      <Flex
+        pointerEvents="none"
+        padding={10}
+        zIndex={2}
+        pos="absolute"
+        top="0"
+        left="0"
+        flexDirection="column"
+        minWidth="100vw"
+        minHeight="100vh">
+        <AddRoomButton />
+        <Spacer />
 
-    return (
-        <div>
-            <Flex pointerEvents="none" padding={10} zIndex={2} pos="absolute" top="0" left="0" flexDirection="column" minWidth="100vw" minHeight="100vh">
-                <AddRoomButton />
-                <Spacer />
+        {overlayInfo ? (
+          <div>
+            <Stack spacing={2}>
+              <Text color="white" fontSize="3xl">
+                Room Info:
+              </Text>
+              <Text color="white" fontSize="2xl">
+                {overlayInfo.currentlyPlaying}
+              </Text>
+              <Text color="white" fontSize="2xl">
+                {overlayInfo.listeners} Campers
+              </Text>
+              <Button pointerEvents="auto"
+                variant="solid"
+                maxWidth={150}
+                opacity="1"
+                colorScheme="blue"
+                onClick={() => alert("Join Room!")}
+              >
+                Join Room{" "}
+              </Button>
+            </Stack>
+          </div>
+        ) : null}
+      </Flex>
 
-                {overlayInfo ?
-                    <Stack spacing={1}>
-                        <Text color="white" fontSize="3xl">Room Info:</Text>
-                        <Text color="white" fontSize="2xl">{overlayInfo.currentlyPlaying}</Text>
-                        <Text color="white" fontSize="2xl">{overlayInfo.listeners} Campers</Text>
-                    </Stack>
-                    : null
-                }
-            </Flex>
-
-            <div>
-                <ReactGlobe
-                    height="100vh"
-                    globeTexture="//unpkg.com/three-globe/example/img/earth-night.jpg"
-                    globeCloudsTexture={null}
-                    backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-                    markers={markers}
-                    width="100vw"
-                    options={options}
-                    onMouseOverMarker={(marker, markerObject, event) => {
-                        setOverlayInfo(marker)
-                    }}
-                />
-            </div>
-        </div>
-    )
+      <div>
+        <ReactGlobe
+          height="100vh"
+          globeTexture="//unpkg.com/three-globe/example/img/earth-night.jpg"
+          globeCloudsTexture={null}
+          backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+          markers={markers}
+          width="100vw"
+          options={options}
+          onMouseOverMarker={(marker, markerObject, event) => {
+            setOverlayInfo(marker);
+          }}
+        />
+      </div>
+    </div>
+  );
 }
 
 export default HomePage;

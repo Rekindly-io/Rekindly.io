@@ -28,7 +28,7 @@ class AddRoomButton extends React.Component {
   render() {
     return (
       <Fragment>
-        <Button pointerEvents="auto" bg="red.600" maxWidth={250} color="white" onClick={() => this.setState({ isOpen: true })}>
+        <Button pointerEvents="auto" variant="solid" maxWidth={250} opacity="1" colorScheme="blue" onClick={() => this.setState({ isOpen: true }) }>
           Create a new room!
         </Button>
 
