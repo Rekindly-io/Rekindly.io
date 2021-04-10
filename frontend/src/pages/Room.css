@@ -4,3 +4,19 @@
     justify-content: center;
     background-color:#000011 ;
 } 
+
+.page{
+    background-image: url("campfire.svg");
+    width: 100vw;
+    height: 100vh;
+}
+
+.chatbox{
+    min-width: 15vw;
+    width: 25vw;
+    min-height: 25vh;
+    position: absolute;
+    right: 0;
+    margin-top: 50vh;
+    margin-right: 1vw;
+}

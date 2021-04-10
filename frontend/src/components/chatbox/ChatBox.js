@@ -47,7 +47,7 @@ function ChatBox({ roomId }) {
 
     // listen for new messages
     return (
-      <Box maxWidth="600px" borderWidth="1px" borderRadius="lg" padding={3}>
+      <Box backgroundColor="gray.700" minHeight="40vh" maxWidth="600px" borderWidth="1px" borderRadius="lg" padding={3}>
           <VStack divider={<StackDivider borderColor="gray.200" />}
                   spacing={4}
                   align="stretch">
@@ -55,7 +55,8 @@ function ChatBox({ roomId }) {
               {messages}
           </VStack>
 
-          <InputGroup marginTop={3}>
+        
+          <InputGroup backgroundColor="gray.700" marginTop={3} position="absolute" bottom="2" maxWidth="94%">
               <InputLeftAddon>
                   <EmailIcon />
               </InputLeftAddon>
