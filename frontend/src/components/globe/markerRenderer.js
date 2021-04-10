@@ -8,7 +8,7 @@ function random(scaleFactor) {
 }
 
 const MARKER_COLOR = "#fcffbe";
-const MARKER_COMPANION_COLOR = "#fff9e6";
+const MARKER_COMPANION_COLOR = "#ff0000";
 
 export default function markerRenderer(marker)  {
   const size = Math.max(marker.value / 20, 1);
@@ -25,7 +25,7 @@ export default function markerRenderer(marker)  {
 
   // add companion markers based on size
   const companions = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 500; i++) {
     const companionGeometry = new THREE.SphereGeometry(
       Math.min((size * Math.random()) / 2, 1),
       10,

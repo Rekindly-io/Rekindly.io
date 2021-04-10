@@ -28,7 +28,7 @@ class AddRoomButton extends React.Component {
   render() {
     return (
       <Fragment>
-        <Button bg="red.600" zIndex={2} pos="absolute" top="10" left="10" onClick={() => this.setState({ isOpen: true })}>
+        <Button pointerEvents="auto" bg="red.600" maxWidth={250} color="white" onClick={() => this.setState({ isOpen: true })}>
           Create a new room!
         </Button>
 
@@ -36,7 +36,6 @@ class AddRoomButton extends React.Component {
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Create a room!</ModalHeader>
-            <ModalCloseButton />
             <ModalBody pb={6}>
               <FormControl>
                 <FormLabel>Display Name</FormLabel>

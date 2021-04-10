@@ -1,48 +1,53 @@
 import ReactGlobe from "react-globe";
-import AddRoomButton from "../Components/AddRoomButton";
+import AddRoomButton from "../components/AddRoomButton";
 import "./Room.css";
-import markers from "../Components/globe/markers";
-import markerRenderer from "../Components/globe/markerRenderer";
-
-function handleClick(e) {
-  alert("u clicked a dot");
-  alert(e.target);
-}
+import markers from "../components/globe/markers";
+import markerRenderer from "../components/globe/markerRenderer";
+import { Text, Flex, Spacer } from "@chakra-ui/react"
+import { Box, Stack } from "@chakra-ui/layout"
+import { useState } from "react";
 
 function HomePage() {
-  const N = 300;
-  const gData = [...Array(N).keys()].map(() => ({
-    lat: (Math.random() - 0.5) * 180,
-    lng: (Math.random() - 0.5) * 360,
-    size: Math.random() / 3,
-    color: ["white"][Math.round(Math.random() * 3)],
-  }));
+    const options = {
+        markerRenderer,
+        markerTooltipRenderer: () => {}
+    }
 
-  const options = {
-    markerRenderer,
-  };
-  /*<Globe
-          globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-          pointsData={gData}
-          pointAltitude={0}
-          onPointClick={handleClick}
+    const [overlayInfo, setOverlayInfo] = useState(null)
 
-        />*/
-  return (
-    <div>
-      <AddRoomButton />
+    return (
+        <div>
+            <Flex pointerEvents="none" padding={10} zIndex={2} pos="absolute" top="0" left="0" flexDirection="column" minWidth="100vw" minHeight="100vh">
+                <AddRoomButton />
+                <Spacer />
 
-      <div>
-        <ReactGlobe
-          height="100vh"
-          globeTexture="https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg"
-          markers={markers}
-          width="100vw"
-          options={options}
-        />
-      </div>
-    </div>
-  );
+                {overlayInfo ?
+                    <Stack spacing={1}>
+                        <Text color="white" fontSize="3xl">Room Info:</Text>
+                        <Text color="white" fontSize="2xl">{overlayInfo.currentlyPlaying}</Text>
+                        <Text color="white" fontSize="2xl">{overlayInfo.listeners} Campers</Text>
+                    </Stack>
+                    : null
+                }
+            </Flex>
+
+            <div>
+                <ReactGlobe
+                    height="100vh"
+                    globeTexture="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                    globeCloudsTexture={null}
+                    backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+                    markers={markers}
+                    width="100vw"
+                    options={options}
+                    onMouseOverMarker={(marker, markerObject, event) => {
+                        setOverlayInfo(marker)
+                    }}
+                />
+            </div>
+        </div>
+    )
 }
 
 export default HomePage;
+// https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg"

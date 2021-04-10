@@ -30,8 +30,6 @@ function onKeyPress(socket, event, message) {
     sendMessage(socket, message)
 }
 
-
-
 function ChatBox({ roomId }) {
     const socket = useContext(SocketContext);
 
