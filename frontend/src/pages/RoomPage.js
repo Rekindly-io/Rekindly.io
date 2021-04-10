@@ -6,7 +6,13 @@ function RoomPage() {
     const socket = useContext(SocketContext);
 
     return (
-        <ChatBox />
+        <div className="page">
+         
+            <div className="chatbox">
+                <ChatBox />
+            </div>
+            
+        </div>
     )
 }
 
