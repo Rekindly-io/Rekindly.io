@@ -1,6 +1,6 @@
 import { Box, Text, Heading } from "@chakra-ui/react"
 
-function Home() {
+function HomePage() {
     return (
         <Box bg="black" minHeight="100vh" minWidth="min-content">
             <Heading color="white" as="span" fontSize="3xl">{"<"}</Heading>
@@ -9,4 +9,4 @@ function Home() {
     )
 }
 
-export default Home
+export default HomePage
