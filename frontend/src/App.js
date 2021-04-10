@@ -9,12 +9,9 @@ import {
 } from 'react-router-dom'
 import RoomPage from './Pages/RoomPage'
 
-import {SocketContext, socket} from './context/socket.js';
-
 function App() {
   return (
     <ChakraProvider>
-      <SocketContext.Provider value={socket}>
         <Router>
           <Switch>
             <Route exact path="/">
@@ -25,7 +22,6 @@ function App() {
             </Route>
           </Switch>
         </Router>
-      </SocketContext.Provider>
     </ChakraProvider>
   );
 }

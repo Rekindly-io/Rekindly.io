@@ -36,9 +36,9 @@ function ChatBox({ roomId }) {
     const socket = useContext(SocketContext);
 
     useEffect(() => {
-        socket.on(NEW_MESSAGE_SOCKET, newMessageData => {
-            setMessages([...messages, <Message name={newMessageData.user} message={newMessageData.msg} />])
-        })
+        // socket.on(NEW_MESSAGE_SOCKET, newMessageData => {
+        //     setMessages([...messages, <Message name={newMessageData.user} message={newMessageData.msg} />])
+        // })
     }, []);
     // current message to send in chat box
     let message = ""
