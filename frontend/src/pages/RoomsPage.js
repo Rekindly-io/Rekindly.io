@@ -3,9 +3,10 @@ import AddRoomButton from '../Components/AddRoomButton';
 import './Room.css'; 
 function handleClick() {
     alert("u clicked a dot")
+    
 }
 
-function Rooms() {
+function RoomsPage() {
     const N = 300;
     const gData = [...Array(N).keys()].map(() => ({
         lat: (Math.random() - 0.5) * 180,
@@ -29,4 +30,4 @@ function Rooms() {
     )
 }
 
-export default Rooms
+export default RoomsPage
