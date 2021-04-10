@@ -10,22 +10,26 @@ import {
 } from 'react-router-dom'
 import RoomPage from './Pages/RoomPage'
 
+import {SocketContext, socket} from './context/socket.js';
+
 function App() {
   return (
     <ChakraProvider>
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <HomePage/>
-          </Route>
-          <Route exact path="/rooms">
-            <RoomsPage />
-          </Route>
-          <Route exact path="/room">
-            <RoomPage />
-          </Route>
-        </Switch>
-      </Router>
+      <SocketContext.Provider value={socket}>
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              <HomePage/>
+            </Route>
+            <Route exact path="/rooms">
+              <RoomsPage />
+            </Route>
+            <Route exact path="/room">
+              <RoomPage />
+            </Route>
+          </Switch>
+        </Router>
+      </SocketContext.Provider>
     </ChakraProvider>
   );
 }
