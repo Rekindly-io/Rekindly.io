@@ -2,7 +2,7 @@ import { InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
 import { Button, Input, InputGroup, useOutsideClick } from "@chakra-ui/react";
 import { VStack, StackDivider, Box, Flex } from "@chakra-ui/layout";
 import Message from "./Message";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../../context/socket";
@@ -14,6 +14,7 @@ function ChatBox() {
   const socket = useContext(SocketContext);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const ref = useRef(null)
 
   function sendMessage(message) {
     setMessage("");
@@ -44,7 +45,9 @@ function ChatBox() {
     return (() => socket.off(NEW_MESSAGE_SOCKET, newMessageListener))
   }, []);
 
-  // current message to send in chat box
+  useEffect(() => {
+    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [messages])
 
   // listen for new messages
   return (
@@ -74,6 +77,7 @@ function ChatBox() {
             />
           );
         })}
+        <div ref={ref} width="0" height="0"></div>
       </VStack>
 
       <InputGroup
