@@ -35,10 +35,14 @@ function ChatBox() {
   }
 
   useEffect(() => {
-    socket.on(NEW_MESSAGE_SOCKET, (newMessageData) => {
-      setMessages(messages.concat(newMessageData));
-    });
-  }, [messages]);
+    const newMessageListener = (newMessageData) => {
+      setMessages(prevMessages => prevMessages.concat(newMessageData));
+    }
+
+    socket.on(NEW_MESSAGE_SOCKET, newMessageListener);
+
+    return (() => socket.off(NEW_MESSAGE_SOCKET, newMessageListener))
+  }, []);
 
   // current message to send in chat box
 
@@ -60,7 +64,6 @@ function ChatBox() {
         align="stretch"
         overflowY="scroll"
         maxHeight="320px"
-        margin={[0, 4]}
       >
         {messages.map((messageData, index) => {
           return (
