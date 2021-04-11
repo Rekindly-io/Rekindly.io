@@ -102,6 +102,7 @@ function AddRoomButton() {
     }
     
     sessionStorage.setItem("roomID", roomId);
+    sessionStorage.setItem("isHost", "true");
     history.push("/room");
   }
 
@@ -109,7 +110,7 @@ function AddRoomButton() {
     <Fragment>
       <Button pointerEvents="auto" variant="solid" maxWidth={250} opacity="1" colorScheme="blue" onClick={() => setOpen(true)}>
         Create a new room!
-        </Button>
+      </Button>
 
       <Modal isOpen={isOpen}>
         <ModalOverlay />

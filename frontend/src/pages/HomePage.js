@@ -32,10 +32,16 @@ function HomePage() {
 
 
   const socket = useContext(SocketContext);
-  const joinRoom = () => {
+
+  function joinRoom() {
     socket.emit("new user", "Anonymous")
-    socket.emit("new room", overlayInfo.id)
+    const emit_data = {
+      room_id: overlayInfo.id
+    }
+    console.log("OVERLAY ROOM ID = " + emit_data)
+    socket.emit("new room", emit_data)
     sessionStorage.setItem("roomID",overlayInfo.id);
+    sessionStorage.setItem("isHost", "false");
     history.push("/room");
   }
 
@@ -58,7 +64,7 @@ function HomePage() {
           <div>
             <Stack spacing={2}>
               <Text color="white" fontSize="3xl">
-                Room Info:
+                Room Info: {overlayInfo.id}
               </Text>
               <Text color="white" fontSize="2xl">
                 {overlayInfo.currentlyPlaying}
@@ -66,6 +72,7 @@ function HomePage() {
               <Text color="white" fontSize="2xl">
                 {overlayInfo.listeners} Campers listening
               </Text>
+
               <Button pointerEvents="auto"
                 variant="solid"
                 maxWidth={150}
