@@ -16,6 +16,19 @@ function HomePage() {
   };
 
   const [overlayInfo, setOverlayInfo] = useState(null);
+  const [customMarkers, setMarkers] = useState(markers);
+
+  useEffect(() => {
+
+    fetch('http://localhost:2500/getRooms')
+    .then(res => res.json()).
+      then((calldata) => {
+        setMarkers(calldata.data);
+        console.log(calldata)
+      }).catch(console.log);
+
+  }, []);
+
 
   const socket = useContext(SocketContext);
   const joinRoom = (info) => {
@@ -72,7 +85,7 @@ function HomePage() {
           globeTexture="//unpkg.com/three-globe/example/img/earth-night.jpg"
           globeCloudsTexture={null}
           backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-          markers={markers}
+          markers={customMarkers}
           width="100vw"
           options={options}
           onMouseOverMarker={(marker, markerObject, event) => {
