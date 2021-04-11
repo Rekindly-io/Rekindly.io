@@ -1,6 +1,5 @@
-
 const markers = [
-  {
+  /*{
     id: 1,
     currentlyPlaying: "Now playing: Artist - Some random song6412",
     listeners: 132,
@@ -41,7 +40,7 @@ const markers = [
     currentlyPlaying: "Now playing: Artist - Some random song3",
     listeners: 132,
     value: 54,
-  },
+  }*/
 ];
 
 export default markers;
