@@ -23,9 +23,6 @@ class QueueButton extends React.Component{
         }
     }
 
-
-
-
     render(){
     return (
         <div>

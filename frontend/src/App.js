@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 import RoomPage from './pages/RoomPage'
 
-import {SocketContext, socket} from './context/socket.js';
+import { SocketContext, socket } from './context/socket.js';
 
 function App() {
   return (

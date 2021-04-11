@@ -14,8 +14,8 @@ function HomePage() {
   };
 
   const [overlayInfo, setOverlayInfo] = useState(null);
-  const joinRoom = (e, info) => {
-    
+  const joinRoom = (info) => {
+    console.log(info)
   }
   return (
     <div>
@@ -49,7 +49,10 @@ function HomePage() {
                 maxWidth={150}
                 opacity="1"
                 colorScheme="blue"
-                onClick={() => alert("Join Room!")}
+                onClick={(e) => {
+                  alert("Join Room!");
+                  joinRoom(overlayInfo.id)
+                }}
               >
                 Join Room{" "}
               </Button>
