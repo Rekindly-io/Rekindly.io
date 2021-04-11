@@ -1,75 +1,101 @@
-import { InputLeftAddon, InputRightAddon } from "@chakra-ui/input"
-import { Button, Input, InputGroup } from "@chakra-ui/react"
-import { VStack, StackDivider, Box } from "@chakra-ui/layout"
-import { EmailIcon } from "@chakra-ui/icons"
-import Message from './Message'
-import { io } from "socket.io-client"
-import { useState } from 'react';
+import { InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
+import { Button, Input, InputGroup, useOutsideClick } from "@chakra-ui/react";
+import { VStack, StackDivider, Box } from "@chakra-ui/layout";
+import Message from "./Message";
+import { useState } from "react";
 
-import {useContext, useEffect} from "react";
-import { SocketContext } from '../../context/socket'
+import { useContext, useEffect } from "react";
+import { SocketContext } from "../../context/socket";
 
-const NEW_MESSAGE_SOCKET = "new mesage"
-const SEND_MESSAGE_SOCKET = "send message"
+const NEW_MESSAGE_SOCKET = "new message";
+const SEND_MESSAGE_SOCKET = "send message";
 
-function sendMessage(socket, message) {
+function ChatBox() {
+  const socket = useContext(SocketContext);
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+
+  function sendMessage(message) {
+    setMessage("");
+    
     // check for blank or empty string
     if (!message || /^\s*$/.test(message)) {
-        return
+      return;
     }
+    
+    socket.emit(SEND_MESSAGE_SOCKET, message);
+  }
 
-    // alert("message sent: " + message)
-    socket.emit(SEND_MESSAGE_SOCKET, message)
-}
-
-function onKeyPress(socket, event, message) {
+  function onKeyPress(event, message) {
     if (event.key !== "Enter") {
-        return
+      return;
     }
 
-    sendMessage(socket, message)
+    sendMessage(message);
+  }
+
+  useEffect(() => {
+    socket.on(NEW_MESSAGE_SOCKET, (newMessageData) => {
+      setMessages(messages.concat(newMessageData));
+    });
+  }, [messages]);
+
+  // current message to send in chat box
+
+  // listen for new messages
+  return (
+    <Box
+      backgroundColor="white"
+      minHeight="40vh"
+      maxWidth="600px"
+      borderWidth="1px"
+      borderRadius="lg"
+      padding={3}
+    >
+      <VStack
+        divider={<StackDivider borderColor="gray.200" />}
+        spacing={4}
+        align="stretch"
+        overflowY="scroll"
+        maxHeight="320px"
+      >
+        {messages.map((messageData, index) => {
+          return (
+            <Message
+              key={index}
+              name={messageData.user}
+              message={messageData.msg}
+            />
+          );
+        })}
+      </VStack>
+
+      <InputGroup
+        backgroundColor="none"
+        marginTop={3}
+        position="absolute"
+        bottom="2"
+        maxWidth="94%"
+      >
+        <Input
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          variant="outline"
+          placeholder="Send a message..."
+          onKeyDown={(event) => onKeyPress(event, message)}
+        />
+        <InputRightAddon padding={0}>
+          <Button
+            onClick={() => sendMessage(message)}
+            borderLeftRadius={0}
+            colorScheme="blue"
+          >
+            Send
+          </Button>
+        </InputRightAddon>
+      </InputGroup>
+    </Box>
+  );
 }
 
-function ChatBox({ roomId }) {
-    const socket = useContext(SocketContext);
-
-    useEffect(() => {
-        socket.on(NEW_MESSAGE_SOCKET, newMessageData => {
-            setMessages([...messages, <Message name={newMessageData.user} message={newMessageData.msg} />])
-        })
-    }, []);
-    // current message to send in chat box
-    let message = ""
-
-    const [messages, setMessages] = useState([<Message name="anonymous" message="some message here" />])
-
-    // listen for new messages
-    return (
-      <Box backgroundColor="gray.700" minHeight="40vh" maxWidth="600px" borderWidth="1px" borderRadius="lg" padding={3}>
-          <VStack divider={<StackDivider borderColor="gray.200" />}
-                  spacing={4}
-                  align="stretch">
-
-              {messages}
-          </VStack>
-
-        
-          <InputGroup backgroundColor="gray.700" marginTop={3} position="absolute" bottom="2" maxWidth="94%">
-              <InputLeftAddon>
-                  <EmailIcon />
-              </InputLeftAddon>
-              <Input onChange={event => message = event.target.value}
-                     variant="outline"
-                     placeholder="Send a message..."
-                     onKeyDown={event => onKeyPress(socket, event, message)} />
-              <InputRightAddon padding={0}>
-                  <Button onClick={() => sendMessage(socket, message)}
-                          borderLeftRadius={0}
-                          colorScheme="red">Send</Button>
-              </InputRightAddon>
-          </InputGroup>
-      </Box>
-    )
-}
-
-export default ChatBox
+export default ChatBox;

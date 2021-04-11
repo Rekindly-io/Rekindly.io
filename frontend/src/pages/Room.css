@@ -6,7 +6,7 @@
 } 
 
 .page{
-    background-image: url("campfire.svg");
+    background-image: url("//unpkg.com/three-globe/example/img/night-sky.png");
     width: 100vw;
     height: 100vh;
 }

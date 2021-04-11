@@ -10,10 +10,9 @@ import {
   FormLabel,
   Input,
   Button,
-  ModalCloseButton,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { SocketContext } from "../context/socket"
+import { useHistory } from "react-router-dom";
 
 
 function AddRoomButton() {
@@ -24,11 +23,15 @@ function AddRoomButton() {
 
   const socket = useContext(SocketContext);
 
+  let history = useHistory()
+
   function createRoom(socket, displayName, roomId) {
     socket.emit("new user", displayName)
     socket.emit("new room", roomId)
-
+    sessionStorage.setItem("roomID", roomId);
+    history.push("/room");
   }
+
   return (
     <Fragment>
       <Button pointerEvents="auto" variant="solid" maxWidth={250} opacity="1" colorScheme="blue" onClick={() => setOpen(true)}>

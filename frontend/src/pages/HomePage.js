@@ -5,11 +5,13 @@ import markers from "../components/globe/markers";
 import markerRenderer from "../components/globe/markerRenderer";
 import { Text, Flex, Spacer, Button } from "@chakra-ui/react";
 import { Box, Stack } from "@chakra-ui/layout";
-import { useState , useContext } from "react";
+import { useState, useContext } from "react";
 import { SocketContext } from "../context/socket";
 import { useHistory } from "react-router-dom";
 
 function HomePage() {
+  let history = useHistory();
+
   const options = {
     markerRenderer,
     markerTooltipRenderer: () => { },
@@ -17,11 +19,13 @@ function HomePage() {
 
   const [overlayInfo, setOverlayInfo] = useState(null);
   const socket = useContext(SocketContext);
-  const joinRoom = (info) => {
-    console.log(info)
+  const joinRoom = () => {
+    socket.emit("new user", "Anonymous")
+    socket.emit("new room", overlayInfo.id)
+    sessionStorage.setItem("roomID",overlayInfo.id);
+    history.push("/room");
   }
 
-  const gotoRoom
   return (
     <div>
       <Flex
@@ -54,12 +58,9 @@ function HomePage() {
                 maxWidth={150}
                 opacity="1"
                 colorScheme="blue"
-                onClick={(e) => {
-                  alert("Join Room!");
-                  joinRoom(overlayInfo.id)
-                }}
+                onClick={() => joinRoom(overlayInfo.id)}
               >
-                Join Room{" "}
+                Join Room
               </Button>
             </Stack>
           </div>
