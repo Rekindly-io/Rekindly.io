@@ -64,7 +64,7 @@ function ChatBox() {
         spacing={4}
         align="stretch"
         overflowY="scroll"
-        maxHeight="400px"
+        height="300px"
       >
         {messages.map((messageData, index) => {
           return (
