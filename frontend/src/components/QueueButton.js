@@ -10,8 +10,7 @@ import {
     FormLabel,
     Input,
     Button,
-    ModalCloseButton, 
-    useDisclosure
+    ModalCloseButton
   } from '@chakra-ui/react';
 
 class QueueButton extends React.Component{

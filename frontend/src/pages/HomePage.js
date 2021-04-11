@@ -10,6 +10,8 @@ import { SocketContext } from "../context/socket";
 import { useHistory } from "react-router-dom";
 
 function HomePage() {
+  let history = useHistory();
+
   const options = {
     markerRenderer,
     markerTooltipRenderer: () => { },
@@ -19,7 +21,6 @@ function HomePage() {
   const [customMarkers, setMarkers] = useState(markers);
 
   useEffect(() => {
-
     fetch('http://localhost:2500/getRooms')
     .then(res => res.json()).
       then((calldata) => {
@@ -31,8 +32,17 @@ function HomePage() {
 
 
   const socket = useContext(SocketContext);
-  const joinRoom = (info) => {
-    console.log(info)
+
+  function joinRoom() {
+    socket.emit("new user", "Anonymous")
+    const emit_data = {
+      room_id: overlayInfo.id
+    }
+    console.log("OVERLAY ROOM ID = " + emit_data)
+    socket.emit("new room", emit_data)
+    sessionStorage.setItem("roomID",overlayInfo.id);
+    sessionStorage.setItem("isHost", "false");
+    history.push("/room");
   }
 
   return (
@@ -54,7 +64,7 @@ function HomePage() {
           <div>
             <Stack spacing={2}>
               <Text color="white" fontSize="3xl">
-                Room Info:
+                Room Info: {overlayInfo.id}
               </Text>
               <Text color="white" fontSize="2xl">
                 {overlayInfo.currentlyPlaying}
@@ -62,17 +72,15 @@ function HomePage() {
               <Text color="white" fontSize="2xl">
                 {overlayInfo.listeners} Campers listening
               </Text>
+
               <Button pointerEvents="auto"
                 variant="solid"
                 maxWidth={150}
                 opacity="1"
                 colorScheme="blue"
-                onClick={(e) => {
-                  alert("Join Room!");
-                  joinRoom(overlayInfo.id)
-                }}
+                onClick={() => joinRoom(overlayInfo.id)}
               >
-                Join Room{" "}
+                Join Room
               </Button>
             </Stack>
           </div>
