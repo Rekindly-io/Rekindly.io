@@ -16,28 +16,39 @@ function Video() {
         if(sessionStorage.getItem("isHost") === "true"){
             console.log("I am the host!")
             setIsHost(true);
+
+            console.log(`initializing interval`);
+            const interval = setInterval(() => {
+                forceSync();
+            }, 1000);
+
+            return () => {
+                console.log(`clearing interval`);
+                clearInterval(interval);
+            };
         } else {
-            console.log("I am NOT the host!")
-            socket.on('syncVideoClient', function(data) {
-                var currTime = data.time
-                var state = data.state
-                var videoId = data.videoId
-                var playerId = data.playerId
-
-                console.log("Received sync event");
-                console.log(data);
-
-                if(player){
-                    player.seekTo(currTime);
-
-                } else {
-                    console.log("Player is null!")
-                }
-
-            })
+            // console.log("I am NOT the host!")
+            // socket.on('syncVideoClient', function(data) {
+            //     var currTime = data.time
+            //     var state = data.state
+            //     var videoId = data.videoId
+            //     var playerId = data.playerId
+            //
+            //     console.log("Received sync event");
+            //     console.log(data);
+            //
+            //     if(player){
+            //         player.seekTo(currTime);
+            //
+            //     } else {
+            //         console.log("Player is null!")
+            //     }
+            //
+            // })
         }
     }, [])
 
+    // NOT host sockets
     useEffect(() => {
         console.log("Player initialized!")
         console.log(player)
@@ -56,15 +67,71 @@ function Video() {
                 console.log(data);
 
                 if(player){
-                    player.seekTo(currTime);
+                    let diff = Math.abs(player.getCurrentTime() - currTime);
+                    if(diff > 0.5) {
+                        console.log("Time difference = " + diff)
+                        player.seekTo(currTime);
+                    }
 
                 } else {
-                    console.log("Player is null!")
+                    console.log("Player is null sync client!")
                 }
 
             })
-        }
+
+            socket.on('justPlay', function(data) {
+                if(player){
+                    player.playVideo();
+                } else {
+                    console.log("Player is null play client!")
+                }
+            })
+
+            socket.on('justPause', function(data) {
+                if(player){
+                    player.pauseVideo();
+                } else {
+                    console.log("Player is null pause client!")
+                }
+            })
+
+            }
     }, [player])
+
+    function playOthers(){
+        roomId = sessionStorage.getItem("roomID");
+        if(player){
+            const emit_data = {
+                room: roomId,
+            }
+
+            console.log("Emitting Sync Data")
+            console.log(emit_data)
+
+            socket.emit('play other', emit_data);
+
+        } else {
+            console.log("Play Others Player is null!")
+        }
+    }
+
+    function pauseOthers(){
+        roomId = sessionStorage.getItem("roomID");
+
+        if(player){
+            const emit_data = {
+                room: roomId,
+            }
+
+            console.log("Emitting Sync Data")
+            console.log(emit_data)
+
+            socket.emit('pause other', emit_data);
+
+        } else {
+            console.log("Pause Others Player is null!")
+        }
+    }
 
     function forceSync(){
 
@@ -112,7 +179,7 @@ function Video() {
 
     return (
       <Fragment>
-          <YouTube videoId="_uN2aPIdVYI" opts={opts} onReady={_onReady} />
+          <YouTube videoId="_uN2aPIdVYI" opts={opts} onReady={_onReady} onPlay={playOthers} onPause={pauseOthers}/>
           <Button pointerEvents="auto" variant="solid" maxWidth={250} opacity="1" colorScheme="blue"
                   onClick={forceSync}>
               Force Sync
