@@ -9,12 +9,15 @@ import { useState, useContext, useEffect } from 'react'
 import { SocketContext } from "../context/socket";
 import { useHistory } from "react-router-dom";
 
+const INCOMING_ROOM_KEY = "incoming room";
+
 function HomePage() {
   let history = useHistory();
 
   const options = {
     markerRenderer,
     markerTooltipRenderer: () => { },
+    globeGlowColor: '#F8EFBA'
   };
 
   const [overlayInfo, setOverlayInfo] = useState(null);
@@ -22,14 +25,24 @@ function HomePage() {
 
   useEffect(() => {
     fetch('http://localhost:2500/getRooms')
-    .then(res => res.json()).
-      then((calldata) => {
-        setMarkers(calldata.data);
+      .then(res => res.json())
+      .then((calldata) => {
+        setMarkers(prevMarkers => prevMarkers.concat(calldata.data));
         console.log(calldata)
-      }).catch(console.log);
+      })
+      .catch(console.log);
 
+    const newRoomListener = data => {
+      console.log(data);
+      setMarkers(prevMarkers => prevMarkers.concat([data]))
+    };
+
+    socket.on(INCOMING_ROOM_KEY, newRoomListener);
+
+    return (() => {
+      socket.off(INCOMING_ROOM_KEY, newRoomListener);
+    });
   }, []);
-
 
   const socket = useContext(SocketContext);
 
@@ -40,7 +53,7 @@ function HomePage() {
     }
     console.log("OVERLAY ROOM ID = " + emit_data)
     socket.emit("new room", emit_data)
-    sessionStorage.setItem("roomID",overlayInfo.id);
+    sessionStorage.setItem("roomID", overlayInfo.id);
     sessionStorage.setItem("isHost", "false");
     history.push("/room");
   }
