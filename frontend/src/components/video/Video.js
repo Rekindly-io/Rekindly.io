@@ -2,12 +2,15 @@ import React, { useEffect, useState, useContext, useRef, Fragment } from 'react'
 import YouTube from 'react-youtube';
 import { SocketContext } from '../../context/socket'
 import { Button } from '@chakra-ui/react'
+import { YouTubeVideo } from 'youtube-video-parser';
 
 function Video() {
     function youtube_parser(url){
+        // console.log("Youtube parser - " + url)
         var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
         var match = url.match(regExp);
-        return (match&&match[7].length==11)? match[7] : false;
+        console.log(match)
+        return match[3]
     }
 
     const socket = useContext(SocketContext);
@@ -34,24 +37,6 @@ function Video() {
                 clearInterval(interval);
             };
         } else {
-            // console.log("I am NOT the host!")
-            // socket.on('syncVideoClient', function(data) {
-            //     var currTime = data.time
-            //     var state = data.state
-            //     var videoId = data.videoId
-            //     var playerId = data.playerId
-            //
-            //     console.log("Received sync event");
-            //     console.log(data);
-            //
-            //     if(player){
-            //         player.seekTo(currTime);
-            //
-            //     } else {
-            //         console.log("Player is null!")
-            //     }
-            //
-            // })
         }
     }, [])
 
@@ -62,38 +47,55 @@ function Video() {
         console.log("Player initialized!")
         console.log(player)
 
+        async function attemptVideoSync(data){
+            var currTime = data.time
+            var state = data.state
+            var videoId = data.videoId
+            var playerId = data.playerId
+
+            let customRef = await yt_player.current.internalPlayer;
+
+            if(customRef){
+                let prev_url = await customRef.getVideoUrl()
+                let prev_id = YouTubeVideo.getVideoId(prev_url);
+                console.log("Previous URL PRE - " + prev_url)
+                console.log("Previous ID PRE - " + prev_id)
+
+
+                if(prev_id && prev_id !== videoId){
+                    console.log("Previous ID - " + prev_id)
+                    console.log("New ID - " + videoId)
+                    console.log("RELOADING VIDEO")
+                    customRef.loadVideoById(videoId);
+                } else {
+                    let vidTime = await customRef.getCurrentTime()
+                    let diff = Math.abs( vidTime - currTime);
+                    console.log("Video Player Time - " + vidTime)
+                    console.log("currTime Player Time - " + currTime)
+                    if (diff > 0.5) {
+                        console.log("Time difference = " + diff)
+                        customRef.seekTo(currTime);
+                    }
+                }
+
+            } else {
+                console.log("Player is null sync client!")
+            }
+        }
+
         if(sessionStorage.getItem("isHost") === "true"){
             setVideo(sessionStorage.getItem("initialVideo"))
         } else {
             console.log("I am NOT the host!")
 
             socket.on('syncVideoClient', function(data) {
-                var currTime = data.time
-                var state = data.state
-                var videoId = data.videoId
-                var playerId = data.playerId
+
 
                 console.log("Received sync event");
                 console.log(data);
 
-                if(player){
+                attemptVideoSync(data)
 
-
-                    if(youtube_parser(player.getVideoUrl()) !== videoId){
-                        console.log("Previous ID - " + youtube_parser(player.getVideoUrl()))
-                        console.log("New ID - " + videoId)
-                        player.loadVideoById(videoId);
-                    } else {
-                        let diff = Math.abs(player.getCurrentTime() - currTime);
-                        if (diff > 0.5) {
-                            console.log("Time difference = " + diff)
-                            player.seekTo(currTime);
-                        }
-                    }
-
-                } else {
-                    console.log("Player is null sync client!")
-                }
 
             })
 
@@ -194,12 +196,14 @@ function Video() {
     };
 
     function setVideo(videoId){
+        console.log("Set video called.")
         roomId = sessionStorage.getItem("roomID");
 
         if(player){
 
             console.log("Previous ID - " + youtube_parser(player.getVideoUrl()))
             console.log("New ID - " + videoId)
+            console.log("SETTING VIDEO")
 
             player.loadVideoById(videoId);
 
@@ -215,7 +219,6 @@ function Video() {
 
         } else {
             console.log("Force Sync Player is null!")
-
         }
     }
 

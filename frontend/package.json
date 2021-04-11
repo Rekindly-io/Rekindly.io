@@ -20,7 +20,8 @@
     "react-youtube": "^7.13.1",
     "socket.io-client": "^4.0.1",
     "three": "^0.118.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "youtube-video-parser": "^1.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
