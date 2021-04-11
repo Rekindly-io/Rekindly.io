@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { SocketContext } from "../context/socket"
+import { useHistory } from "react-router-dom";
 
 
 function AddRoomButton() {
@@ -22,12 +23,47 @@ function AddRoomButton() {
   const [youtubeLink, setYoutubeLink] = useState("")
   const [displayName, setDisplayName] = useState("")
 
+  const [position, setPosition] = useState({});
+  const [error, setError] = useState(null);
+
+  const onChange = ({coords}) => {
+    setPosition({
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
+    console.log("POSITION UPDATE")
+    console.log("Latitude = " + position.latitude)
+    console.log("Longitude = " + position.longitude)
+    console.log("Error = " + error)
+  };
+
+  const onError = (error) => {
+    setError(error.message);
+  };
+
+  useEffect(() => {
+    const geo = navigator.geolocation;
+    if (!geo) {
+      setError('Geolocation is not supported');
+      return;
+    }
+    const watcher = geo.watchPosition(onChange, onError);
+    return () => geo.clearWatch(watcher);
+  }, []);
+
   const socket = useContext(SocketContext);
+  const history = useHistory();
 
-  function createRoom(socket, displayName, roomId) {
+  function createRoom(socket, displayName, roomId, lat, long) {
     socket.emit("new user", displayName)
-    socket.emit("new room", roomId)
+    const data = {
+      room_id: roomId,
+      latitude: lat,
+      longitude: long,
+    }
 
+    console.log(data);
+    socket.emit("new room", data)
   }
   return (
     <Fragment>
@@ -67,7 +103,13 @@ function AddRoomButton() {
             <Button
               onClick={() => {
                 setOpen(false)
-                createRoom(socket, displayName, roomID, youtubeLink)
+                history.push("/room")
+                console.log("POSITION SENT")
+                console.log("Latitude = " + position.latitude)
+                console.log("Longitude = " + position.longitude)
+                console.log("Error = " + error)
+
+                createRoom(socket, displayName, roomID, youtubeLink, position.latitude, position.longitude)
               }}
               colorScheme="blue"
               mr={3}
