@@ -73,15 +73,24 @@ function AddRoomButton() {
   const socket = useContext(SocketContext);
   const history = useHistory();
 
-  function createRoom(socket, displayName, roomId, lat, long) {
+  function youtube_parser(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+  }
+
+  function createRoom(socket, displayName, roomId, youtubeLink, lat, long) {
     socket.emit("new user", displayName)
     let data = null;
+
     if(lat){
       data = {
         room_id: roomId,
         latitude: lat,
         longitude: long,
       }
+      socket.emit("new room", data)
+      console.log(data)
     } else {
       fetch('http://geolocation-db.com/json/f9902210-97f0-11eb-a459-b997d30983f1')
       .then(res => res.json())
@@ -103,6 +112,12 @@ function AddRoomButton() {
     
     sessionStorage.setItem("roomID", roomId);
     sessionStorage.setItem("isHost", "true");
+    console.log("Youtube Link - " + youtubeLink + " After parsing - " + youtube_parser(youtubeLink))
+    if(youtube_parser(youtubeLink) !== false){
+      sessionStorage.setItem("initialVideo", youtube_parser(youtubeLink))
+    } else {
+      sessionStorage.setItem("initialVideo", "_uN2aPIdVYI")
+    }
     history.push("/room");
   }
 
@@ -134,7 +149,11 @@ function AddRoomButton() {
             <FormControl>
               <FormLabel>YouTube Link</FormLabel>
               <Input
-                onChange={(event) => setYoutubeLink(event.target.value)}
+                onChange={(event) => {
+                  // console.log("Setting youtube link - " + event.target.value + " " + youtubeLink)
+
+                  setYoutubeLink(event.target.value)
+                }}
                 placeholder="Paste YouTube Link"
               />
             </FormControl>
