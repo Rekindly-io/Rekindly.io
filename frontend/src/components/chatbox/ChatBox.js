@@ -1,6 +1,6 @@
 import { InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
 import { Button, Input, InputGroup, useOutsideClick } from "@chakra-ui/react";
-import { VStack, StackDivider, Box } from "@chakra-ui/layout";
+import { VStack, StackDivider, Box, Flex } from "@chakra-ui/layout";
 import Message from "./Message";
 import { useState } from "react";
 
@@ -17,12 +17,12 @@ function ChatBox() {
 
   function sendMessage(message) {
     setMessage("");
-    
+
     // check for blank or empty string
     if (!message || /^\s*$/.test(message)) {
       return;
     }
-    
+
     socket.emit(SEND_MESSAGE_SOCKET, message);
   }
 
@@ -44,13 +44,15 @@ function ChatBox() {
 
   // listen for new messages
   return (
-    <Box
+    <Flex
       backgroundColor="white"
       minHeight="40vh"
       maxWidth="600px"
       borderWidth="1px"
       borderRadius="lg"
       padding={3}
+      justifyContent="space-between"
+      direction="column"
     >
       <VStack
         divider={<StackDivider borderColor="gray.200" />}
@@ -58,6 +60,7 @@ function ChatBox() {
         align="stretch"
         overflowY="scroll"
         maxHeight="320px"
+        margin={[0, 4]}
       >
         {messages.map((messageData, index) => {
           return (
@@ -73,9 +76,7 @@ function ChatBox() {
       <InputGroup
         backgroundColor="none"
         marginTop={3}
-        position="absolute"
-        bottom="2"
-        maxWidth="94%"
+        maxWidth="100%"
       >
         <Input
           value={message}
@@ -94,7 +95,7 @@ function ChatBox() {
           </Button>
         </InputRightAddon>
       </InputGroup>
-    </Box>
+    </Flex>
   );
 }
 

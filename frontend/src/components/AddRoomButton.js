@@ -14,7 +14,6 @@ import {
 import { SocketContext } from "../context/socket"
 import { useHistory } from "react-router-dom";
 
-
 function AddRoomButton() {
   const [isOpen, setOpen] = useState(false)
   const [roomID, setRoomID] = useState("")
@@ -34,7 +33,7 @@ function AddRoomButton() {
     console.log("Longitude = " + position.longitude)
     console.log("Error = " + error)
 
-    if(position.latitude){
+    if (position.latitude) {
 
     } else {
       fetch('http://geolocation-db.com/json/f9902210-97f0-11eb-a459-b997d30983f1')
