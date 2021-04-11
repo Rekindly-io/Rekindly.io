@@ -9,14 +9,12 @@ function RoomPage() {
     const history = useHistory();
     let roomId = "";
 
-
     useEffect(() => {
         roomId = sessionStorage.getItem("roomID");
 
         if (!roomId) {
             history.push("/");
         }
-
     }, [])
 
     return (
