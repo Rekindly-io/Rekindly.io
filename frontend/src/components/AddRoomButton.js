@@ -15,10 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { SocketContext } from "../context/socket"
 
-function createRoom(socket, displayName, roomId) {
-  socket.emit("new user", displayName)
-  socket.emit("new room", roomId)
-}
 
 function AddRoomButton() {
   const [isOpen, setOpen] = useState(false)
@@ -28,6 +24,11 @@ function AddRoomButton() {
 
   const socket = useContext(SocketContext);
 
+  function createRoom(socket, displayName, roomId) {
+    socket.emit("new user", displayName)
+    socket.emit("new room", roomId)
+
+  }
   return (
     <Fragment>
       <Button pointerEvents="auto" variant="solid" maxWidth={250} opacity="1" colorScheme="blue" onClick={() => setOpen(true)}>

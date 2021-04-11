@@ -5,7 +5,9 @@ import markers from "../components/globe/markers";
 import markerRenderer from "../components/globe/markerRenderer";
 import { Text, Flex, Spacer, Button } from "@chakra-ui/react";
 import { Box, Stack } from "@chakra-ui/layout";
-import { useState } from "react";
+import { useState , useContext } from "react";
+import { SocketContext } from "../context/socket";
+import { useHistory } from "react-router-dom";
 
 function HomePage() {
   const options = {
@@ -14,9 +16,12 @@ function HomePage() {
   };
 
   const [overlayInfo, setOverlayInfo] = useState(null);
+  const socket = useContext(SocketContext);
   const joinRoom = (info) => {
     console.log(info)
   }
+
+  const gotoRoom
   return (
     <div>
       <Flex
@@ -42,7 +47,7 @@ function HomePage() {
                 {overlayInfo.currentlyPlaying}
               </Text>
               <Text color="white" fontSize="2xl">
-                {overlayInfo.listeners} Campers
+                {overlayInfo.listeners} Campers listening
               </Text>
               <Button pointerEvents="auto"
                 variant="solid"
