@@ -36,22 +36,21 @@ function AddRoomButton() {
     if (position.latitude) {
 
     } else {
-      fetch('http://geolocation-db.com/json/f9902210-97f0-11eb-a459-b997d30983f1')
-        .then(res => res.json())
-        .then((data) => {
-          console.log(data)
-          setPosition({
-            latitude: data.latitude,
-            longitude: data.longitude,
-          });
-        }).then(() => {
-          console.log("POS UNDEFINED FALLBACK")
-          console.log("Latitude = " + position.latitude)
-          console.log("Longitude = " + position.longitude)
-          console.log("Error = " + error)
-        })
-        .catch(console.log)
-
+      fetch('https://geolocation-db.com/json/f9902210-97f0-11eb-a459-b997d30983f1')
+      .then(res => res.json())
+      .then((data) => {
+        console.log(data)
+        setPosition({
+          latitude: data.latitude,
+          longitude: data.longitude,
+        });
+      }).then(() => {
+        console.log("POS UNDEFINED FALLBACK")
+        console.log("Latitude = " + position.latitude)
+        console.log("Longitude = " + position.longitude)
+        console.log("Error = " + error)
+      })
+      .catch(console.log)
 
     }
   };
