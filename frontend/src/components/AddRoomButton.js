@@ -91,7 +91,7 @@ function AddRoomButton() {
       socket.emit("new room", data)
       console.log(data)
     } else {
-      fetch('http://geolocation-db.com/json/f9902210-97f0-11eb-a459-b997d30983f1')
+      fetch('https://geolocation-db.com/json/f9902210-97f0-11eb-a459-b997d30983f1')
         .then(res => res.json())
         .then((calldata) => {
           data = {

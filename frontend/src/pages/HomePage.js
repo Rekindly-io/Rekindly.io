@@ -24,7 +24,7 @@ function HomePage() {
   const [customMarkers, setMarkers] = useState(markers);
 
   useEffect(() => {
-    fetch('http://localhost:2500/getRooms')
+    fetch('https://rekindly-backend.herokuapp.com/')
       .then(res => res.json())
       .then((calldata) => {
         setMarkers(prevMarkers => prevMarkers.concat(calldata.data));
