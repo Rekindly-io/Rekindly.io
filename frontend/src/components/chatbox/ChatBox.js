@@ -52,7 +52,6 @@ function ChatBox() {
   // listen for new messages
   return (
     <Flex
-      backgroundColor="white"
       minHeight="40vh"
       maxWidth="600px"
       borderWidth="1px"
@@ -62,11 +61,10 @@ function ChatBox() {
       direction="column"
     >
       <VStack
-        divider={<StackDivider borderColor="gray.200" />}
         spacing={4}
         align="stretch"
         overflowY="scroll"
-        maxHeight="320px"
+        height="300px"
       >
         {messages.map((messageData, index) => {
           return (
@@ -91,12 +89,12 @@ function ChatBox() {
           variant="outline"
           placeholder="Send a message..."
           onKeyDown={(event) => onKeyPress(event, message)}
+          color="white"
         />
         <InputRightAddon padding={0}>
           <Button
             onClick={() => sendMessage(message)}
             borderLeftRadius={0}
-            colorScheme="blue"
           >
             Send
           </Button>

@@ -25,14 +25,14 @@ class QueueButton extends React.Component{
     render(){
     return (
         <div>
-            <Button onClick={() => this.setState({isOpen : true})}> Add a song! </Button>
+            <Button colorScheme="orange" onClick={() => this.setState({isOpen : true})}> Add a song! </Button>
             
             <Modal
                 isOpen={this.state.isOpen}
             >
             <ModalOverlay/>
             <ModalContent>
-                <ModalHeader>Add a song!</ModalHeader>
+                <ModalHeader>Add a song to the queue!</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody pb={6}>
                 <FormControl>
